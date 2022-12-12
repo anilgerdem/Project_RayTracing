@@ -193,7 +193,7 @@ int main() {
             // NORMAL SAMPLING END
 
             // Write pixel value to image
-            writeColor((j * imageWidth + i) * numChannels, pixel_color, pixels);
+            writeColor(((imageHeight - j - 1) * imageWidth + i) * numChannels, pixel_color, pixels);
             
         }
     }
