@@ -5,6 +5,7 @@
 #include <cmath>
 #include <iostream>
 #include <random>
+#include "swCommons.h"
 
 using std::sqrt;
 
@@ -122,6 +123,14 @@ float uniform_random() {
     static std::mt19937 gen(rd());
     static std::uniform_real_distribution<float> dis(0.0f, 1.0f);
     return dis(gen);
+}
+
+Vec3 random_in_unit_disk() {
+    while (true) {
+        Vec3 p = Vec3(random_double(-1, 1), random_double(-1, 1), 0);
+        if (p.length_squared() >= 1) continue;
+        return p;
+    }
 }
 
 Vec3 random_in_unit_sphere() {

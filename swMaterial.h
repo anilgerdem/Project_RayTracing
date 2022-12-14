@@ -79,7 +79,7 @@ class Dialectric : public Material {
         bool cannot_refract = refraction_ratio * sin_theta > 1.0f;
         Vec3 direction;
 
-        if (cannot_refract){ // Below is for schlick's approximation, it can be commented out and then glass will be more clear
+        if (cannot_refract  || reflectance(cos_theta, refraction_ratio) > random_double()){ // Below is for schlick's approximation, it can be commented out and then glass will be more clear
         //if (cannot_refract || reflectance(cos_theta, refraction_ratio) > uniform_random()) {
             direction = reflect(unit_direction, rec.normal);
         } else {

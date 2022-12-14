@@ -8,36 +8,38 @@ namespace sw {
 class Camera {
   public:
     Camera() = default;
-    Camera(Point3 lookFrom, Point3 lookAt, Vec3 vup, float vfov, float aspect_ratio) {
+    Camera(Point3 lookFrom, Point3 lookAt, Vec3 vup, float vfov, float aspectRatio, float aperture, float focusDist) {
         // Camera set up
         float theta = degrees_to_radians(vfov);
-        float h = tan(theta / 2.0f);
-        float viewport_height = 2.0f * h;
-        float viewport_width = aspect_ratio * viewport_height;
+        float h = tan(theta / 2);
+        float viewportHeight = 2 * h;
+        float viewportWidth = aspectRatio * viewportHeight;
 
-        Vec3 w = (lookFrom - lookAt).normalize();
-        Vec3 u = (vup % w).normalize();
-        Vec3 v = w % u;
-
-        float focal_length = 1.0f;
+        w = (lookFrom - lookAt).normalize();
+        u = (vup % w).normalize();
+        v = w % u;
 
         origin = lookFrom;
-        horizontal = viewport_width * u;
-        vertical = viewport_height * v;
+        horizontal = focusDist * viewportWidth * u;
+        vertical = focusDist * viewportHeight * v;
         // This assigment starts scanning from top left, but it will be flipped later
-        lower_left = origin - horizontal / 2.0f - vertical / 2.0f - w;
+        lowerLeft = origin - horizontal / 2 - vertical / 2 - focusDist * w;
+        lensRadius = aperture / 2;
     }
 
-      Ray get_ray(float s, float t) const { return Ray(origin, lower_left + s * horizontal + t * vertical - origin);
+      Ray get_ray(float s, float t) const {
+            Vec3 rd = lensRadius * random_in_unit_disk();
+            Vec3 offset = u * rd.x() + v * rd.y();
+          return Ray(origin + offset, lowerLeft + s * horizontal + t * vertical - origin - offset);
       }
 
       private:
           Point3 origin;
           Vec3 horizontal;
           Vec3 vertical;
-          Point3 lower_left;
-
-
+          Point3 lowerLeft;
+          Vec3 u, v, w;
+          float lensRadius;
 };
 
 } // namespace sw

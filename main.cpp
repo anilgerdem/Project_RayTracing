@@ -122,6 +122,11 @@ int main() {
 
     // Defining image features
     const float aspect_ratio = 16.0f / 9.0f; // 1.0f;
+    Vec3 lookFrom = Point3(3.0f, 3.0f, 2.0f);
+    Vec3 lookAt = Point3(0.0f, 0.0f, -1.0f);
+    Vec3 vup = Vec3(0.0f, 1.0f, 0.0f);
+    auto distToFocus = (lookFrom - lookAt).length();
+    auto aperture = 0.12;
     const int imageWidth = 800;
     const int imageHeight = static_cast<int>(imageWidth/aspect_ratio);
     const int numChannels = 3;
@@ -158,7 +163,7 @@ int main() {
     //world.add(make_shared<Sphere>(Point3(-R, 0.0f, -1.0f), R, material_left));
     //world.add(make_shared<Sphere>(Point3(R, 0.0f, -1.0f), R, material_right));
 
-    Camera camera(Point3(-2.0f, 2.0f, 1.0f), Point3(0.0f, 0.0f, -1.0f), Vec3(0.0f, 1.0f, 0.0f), 30.0f, aspect_ratio);
+    Camera camera(lookFrom, lookAt, vup, 30.0f, aspect_ratio, aperture, distToFocus);
 
     // Ray trace pixels
 
